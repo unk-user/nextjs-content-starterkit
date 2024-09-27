@@ -38,8 +38,7 @@ export const uncachedValidateRequest = async (): Promise<
         sessionCookie.attributes
       );
     }
-  } catch (error) {
-    console.error('Failed to set session cookie :', error);
+  } catch {
   }
 
   return result;

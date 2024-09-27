@@ -57,7 +57,9 @@ export function OtpInput({
               <InputOTPSlot
                 key={index}
                 index={index}
-                className={cn(response?.success ? "border-green-500" : "border-red-400")}
+                className={cn(
+                  response?.success ? "border-green-500" : "border-red-400",
+                )}
               />
             ))}
         </InputOTPGroup>

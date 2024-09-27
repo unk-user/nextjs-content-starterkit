@@ -16,7 +16,10 @@ export function LoginForm() {
   }, [state]);
 
   return (
-    <form className="flex w-full max-w-sm flex-col space-y-4" action={formAction}>
+    <form
+      className="flex w-full max-w-sm flex-col space-y-4"
+      action={formAction}
+    >
       <h1 className="text-lg font-bold">Welcome Back</h1>
       <div className="space-y-2">
         <Label>Admin Email</Label>

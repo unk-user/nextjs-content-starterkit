@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <main className="flex min-h-screen flex-col">{children}</main>
-        <Toaster position="top-center" richColors theme="light"/>
+        <Toaster position="top-center" richColors theme="light" />
       </body>
     </html>
   );

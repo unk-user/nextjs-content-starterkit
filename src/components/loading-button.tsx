@@ -1,10 +1,10 @@
-'user client';
+"user client";
 
-import { forwardRef } from 'react';
-import { Loader } from 'lucide-react';
-import { Button, type ButtonProps } from './ui/button';
+import { forwardRef } from "react";
+import { Loader } from "lucide-react";
+import { Button, type ButtonProps } from "./ui/button";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 export interface LoadingButtonProps extends ButtonProps {
   loading?: boolean;
@@ -17,9 +17,9 @@ export const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
         ref={ref}
         {...props}
         disabled={props.disabled ? props.disabled : loading}
-        className={cn('relative', className)}
+        className={cn("relative", className)}
       >
-        <span className={cn(loading ? 'opacity-0' : '')}>{children}</span>
+        <span className={cn(loading ? "opacity-0" : "")}>{children}</span>
         {loading ? (
           <div className="absolute inset-0 grid place-items-center">
             <Loader className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -27,7 +27,7 @@ export const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
         ) : null}
       </Button>
     );
-  }
+  },
 );
 
-LoadingButton.displayName = 'LoadingButton';
+LoadingButton.displayName = "LoadingButton";
