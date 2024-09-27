@@ -60,13 +60,8 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
+  html,
   body {
-    @apply h-full bg-background text-foreground;
-  }
-  html {
-    @apply h-full;
+    @apply min-h-screen;
   }
 }

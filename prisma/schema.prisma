@@ -14,29 +14,26 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  emailVerified Boolean? @default(false)
-  password      String?
-  salt          String?
-  githubId      Int?     @unique
+  id    String @id @default(cuid())
+  email String @unique
+  role  Role
 
-  EmailVerification EmailVerification[]
-  Session           Session[]
+  verificationCodes OneTimePassword[]
+  Sessions          Session[]
 
   @@map("users")
 }
 
-model EmailVerification {
-  id             String   @id @default(cuid())
-  userId         String
-  token          String   @unique
-  tokenExpiresAt DateTime
+model OneTimePassword {
+  id        String   @id @default(cuid())
+  email     String
+  code      String
+  expiresAt DateTime @map("expires_at")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [email], references: [email])
 
-  @@index([userId, tokenExpiresAt])
-  @@map("email_verifications")
+  @@index([email, code])
+  @@map("one_time_passwords")
 }
 
 model Session {
@@ -47,4 +44,9 @@ model Session {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
+}
+
+enum Role {
+  OWNER
+  ADMIN
 }

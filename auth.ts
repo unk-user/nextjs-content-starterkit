@@ -1,7 +1,6 @@
 import { Lucia, TimeSpan } from 'lucia';
 import { PrismaAdapter } from '@lucia-auth/adapter-prisma';
 import prisma from './lib/db';
-import { GitHub } from 'arctic';
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
@@ -17,22 +16,17 @@ export const lucia = new Lucia(adapter, {
   getUserAttributes: (attributes) => {
     return {
       email: attributes.email,
-      emailVerified: attributes.emailVerified,
+      role: attributes.role,
     };
   },
 });
-
-export const github = new GitHub(
-  process.env.GITHUB_CLIENT_ID!,
-  process.env.GITHUB_CLIENT_SECRET!
-);
 
 declare module 'lucia' {
   interface Register {
     Lucia: typeof lucia;
     DatabaseUserAttributes: {
       email: string;
-      emailVerified: boolean;
+      role: 'OWNER' | 'ADMIN';
     };
   }
 }
