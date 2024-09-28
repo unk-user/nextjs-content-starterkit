@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 export async function validateOtp(
   id: string,
   code: string,
-): Promise<ActionResponse | void> {
+): Promise<ActionResponse | null> {
   try {
     const user = await loginOtpUseCase(id, code);
 
@@ -23,5 +23,5 @@ export async function validateOtp(
   } catch (e: any) {
     return { success: false, error: e?.message || "Internal server error" };
   }
-  redirect("/admin");
+  return redirect("/admin");
 }

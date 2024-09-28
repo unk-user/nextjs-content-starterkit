@@ -1,8 +1,16 @@
 "use client";
-import moment from "moment";
 import { useEffect, useState } from "react";
 
-export function CountDown({ expiresAt }: { expiresAt: Date }) {
+import moment from "moment";
+import Link from "next/link";
+
+export function CountDown({
+  expiresAt,
+  email,
+}: {
+  expiresAt: Date;
+  email: string;
+}) {
   const [timeLeft, setTimeLeft] = useState("");
   const expiration = moment(expiresAt);
 
@@ -32,5 +40,20 @@ export function CountDown({ expiresAt }: { expiresAt: Date }) {
     return () => clearInterval(interval);
   }, [expiration]);
 
-  return <div className="text-sm">{timeLeft}</div>;
+  return (
+    <div className="text-sm">
+      Can&apos;t find code? Check your spam folder.{" "}
+      {timeLeft !== "OTP expired" ? (
+        timeLeft
+      ) : (
+        <Link
+          href={`/admin/login?ref=${email}`}
+          className="hover:underline"
+          replace
+        >
+          Resend.
+        </Link>
+      )}
+    </div>
+  );
 }

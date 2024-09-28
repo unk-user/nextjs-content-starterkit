@@ -28,14 +28,14 @@ export async function loginOtpUseCase(id: string, code: string): Promise<User> {
   const otp = await prisma.oneTimePassword.findUnique({
     where: { id, expiresAt: { gt: new Date() } },
   });
-  if (!otp) throw new Error("Otp expired");
+  if (!otp) throw new Error("The code is expired. Please request a new one!");
 
   const isValid = await bcrypt.compare(code, otp.code);
-  if (!isValid) throw new Error("Invalid code");
+  if (!isValid) throw new Error("The code wasn't valid. Give it another try!");
 
   await prisma.oneTimePassword.delete({ where: { id } });
   const user = await prisma.user.findUnique({ where: { email: otp.email } });
-  if (!user) throw new Error("User not found");
+  if (!user) throw new Error("Unfortunately we couldn't find your account.");
 
   return user;
 }
