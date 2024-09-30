@@ -29,9 +29,17 @@ export async function loginOtpUseCase(id: string, code: string): Promise<User> {
     where: { id, expiresAt: { gt: new Date() } },
   });
   if (!otp) throw new Error("The code is expired. Please request a new one!");
+  if (otp.attempts >= 5)
+    throw new Error("Too many attempts. Try to request a new code.");
 
   const isValid = await bcrypt.compare(code, otp.code);
-  if (!isValid) throw new Error("The code wasn't valid. Give it another try!");
+  if (!isValid) {
+    await prisma.oneTimePassword.update({
+      where: { id },
+      data: { attempts: { increment: 1 } },
+    });
+    throw new Error("The code wasn't valid. Give it another try!");
+  }
 
   await prisma.oneTimePassword.delete({ where: { id } });
   const user = await prisma.user.findUnique({ where: { email: otp.email } });

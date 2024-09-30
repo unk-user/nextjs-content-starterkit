@@ -29,6 +29,7 @@ model OneTimePassword {
   email     String
   code      String
   expiresAt DateTime @map("expires_at")
+  attempts  Int      @default(0)
 
   user User @relation(fields: [email], references: [email])
 
