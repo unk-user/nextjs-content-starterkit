@@ -5,12 +5,13 @@ import { Label } from "@/components/ui/label";
 import { useFormState } from "react-dom";
 import { useEffect } from "react";
 import { toast } from "sonner";
-
-import loginAdmin from "./action";
 import { useSearchParams } from "next/navigation";
 
+import loginAdmin from "./action";
+import { useFormStatus } from "react-dom";
+
 export function LoginForm() {
-  const [state, formAction, isPending] = useFormState(loginAdmin, null);
+  const [state, formAction] = useFormState(loginAdmin, null);
   const searchParams = useSearchParams();
   const ref = searchParams.get("ref");
 
@@ -20,17 +21,28 @@ export function LoginForm() {
 
   return (
     <form
-      className="flex w-full max-w-md flex-col space-y-4"
+      className="mb-24 flex w-full max-w-md flex-col px-4"
       action={formAction}
     >
-      <h1 className="text-lg font-bold">Welcome Back</h1>
-      <div className="space-y-2">
-        <Label>Admin Email</Label>
+      <div className="mb-4 sm:mb-6">
+        <h1 className="mb-2 text-2xl font-medium sm:text-3xl">Welcome Back</h1>
+        <p className="text-primary/80">Use your admin email to login.</p>
+      </div>
+      <div className="mb-4 space-y-2 text-start">
+        <Label>Email</Label>
         <Input type="email" name="email" defaultValue={ref || ""} required />
       </div>
-      <Button className="ml-auto w-1/2" disabled={isPending}>
-        Submit
-      </Button>
+      <SubmitButton />
     </form>
+  );
+}
+
+function SubmitButton() {
+  const { pending: isPending } = useFormStatus();
+
+  return (
+    <Button size="lg" className="ml-auto w-full" disabled={isPending}>
+      Login
+    </Button>
   );
 }

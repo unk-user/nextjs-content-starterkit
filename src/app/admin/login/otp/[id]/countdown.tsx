@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import moment from "moment";
 import Link from "next/link";
@@ -7,25 +7,28 @@ import Link from "next/link";
 export function CountDown({
   expiresAt,
   email,
+  attempts,
 }: {
   expiresAt: Date;
   email: string;
+  attempts: number;
 }) {
-  const [timeLeft, setTimeLeft] = useState("");
+  const [timeLeft, setTimeLeft] = useState<string | null>(" ");
   const expiration = moment(expiresAt);
+  const isMaxAttempts = attempts >= 5;
+
+  const calculateTimeLeft = useCallback(() => {
+    const now = moment();
+    const duration = moment.duration(expiration.diff(now));
+
+    if (duration.asSeconds() < 0 || isMaxAttempts) {
+      return null;
+    }
+
+    return `${Math.floor(duration.asMinutes())}:${duration.seconds() < 10 ? "0" : ""}${duration.seconds()}`;
+  }, [expiration, isMaxAttempts]);
 
   useEffect(() => {
-    const calculateTimeLeft = () => {
-      const now = moment();
-      const duration = moment.duration(expiration.diff(now));
-
-      if (duration.asSeconds() < 0) {
-        return "OTP expired";
-      }
-
-      return `${Math.floor(duration.asMinutes())}:${duration.seconds() < 10 ? "0" : ""}${duration.seconds()}`;
-    };
-
     setTimeLeft(calculateTimeLeft());
 
     const interval = setInterval(() => {
@@ -38,22 +41,20 @@ export function CountDown({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [expiration]);
+  }, [expiration, isMaxAttempts, calculateTimeLeft]);
+
+  if (timeLeft) {
+    return <p className="text-sm">{timeLeft}</p>;
+  }
 
   return (
     <div className="text-sm">
-      Can&apos;t find code? Check your spam folder.{" "}
-      {timeLeft !== "OTP expired" ? (
-        timeLeft
-      ) : (
-        <Link
-          href={`/admin/login?ref=${email}`}
-          className="hover:underline"
-          replace
-        >
-          Resend.
-        </Link>
-      )}
+      <p className="inline text-red-500">
+        {isMaxAttempts ? "Too many attempts, " : "OTP expired, "}
+      </p>
+      <Link href={`/admin/login?ref=${email}`} className="underline" replace>
+        Resend.
+      </Link>
     </div>
   );
 }

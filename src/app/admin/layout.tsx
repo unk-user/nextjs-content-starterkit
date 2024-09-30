@@ -19,7 +19,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <main className="flex min-h-screen flex-col">{children}</main>
         <Toaster
-          position="top-center"
+          position="bottom-center"
           richColors
           theme="light"
           icons={{ error: <AlertTriangle color="red" className="w-5 h-5"/> }}
