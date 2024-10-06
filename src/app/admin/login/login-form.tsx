@@ -25,7 +25,7 @@ export function LoginForm() {
       action={formAction}
     >
       <div className="mb-4 sm:mb-6">
-        <h1 className="mb-2 text-2xl font-medium sm:text-3xl">Welcome Back</h1>
+        <h1 className="mb-2 text-2xl font-medium sm:text-3xl">Welcome Back!</h1>
         <p className="text-primary/80">Use your admin email to login.</p>
       </div>
       <div className="mb-4 space-y-2 text-start">
